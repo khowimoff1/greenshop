@@ -1,37 +1,49 @@
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useState } from "react";
 import Slick from "./Slick";
-import { Json } from "./Json";
 import { addItem } from "./CartMenu";
 import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
+import { useEffect } from "react";
+import { fetchData } from "../data/dataJson";
 
 function valuetext(value) {
   return `${value}°C`;
 }
 
-
 const Home = ({ count, setCount }) => {
-  const Jsonn = Json;
   const [singleClick, setSingleClick] = useState([]);
   const dispatch = useDispatch();
-
   const addCartShop = (item) => {
-    if(!singleClick.includes(item.id)){
+    if (!singleClick.includes(item.id)) {
       setSingleClick([...singleClick, item.id]);
       setCount(count + 1);
       dispatch(addItem(item));
     }
   };
   const [value, setValue] = React.useState([20, 37]);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const [sorting, setSorting] = useState(0)
+  const [sorting, setSorting] = useState(0);
+
+  const [flowers, setFlowers] = useState([]);
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await fetchData();
+        setFlowers(data);
+      } catch (error) {
+        console.error("Xatolik:", error);
+      }
+    };
+
+    fetchDataAsync();
+  }, []);
   return (
     <div className="container mx-auto w-full px-4 max-w-6xl mt-6 md:p-0 ">
       <Slick />
@@ -162,19 +174,19 @@ const Home = ({ count, setCount }) => {
           </div>
           {sorting === 0 && (
             <div className="mt-8 grid grid-cols-2 gap-5 md:grid-cols-3 md:gap-8 ">
-              {Jsonn.map((item, index) => {
+              {flowers.slice(0, 9).map((item, index) => {
                 return (
                   <div
                     key={item.id}
                     className={`${index % 2 != 0 ? "mt-5 md:mt-0" : ""}`}
                   >
-                    <div className="bg-gray-100 rounded-xl cursor-pointer p-4">
+                    <div className="bg-gray-100 rounded-2xl cursor-pointer">
                       <NavLink to={"/shop"}>
                         <img
                           onClick={() => addCartShop(item)}
-                          src={item.image}
+                          src={item.image_url}
                           alt="img"
-                          className="md:w-[250px] h-[120px] md:h-[200px]"
+                          className="md:w-[250px] h-[150px] w-full rounded-t-lg md:h-[200px]"
                         />
                       </NavLink>
                       <div
@@ -185,10 +197,80 @@ const Home = ({ count, setCount }) => {
                       </div>
                     </div>
                     <h1 className="mt-4 cursor-default text-base font-normal leading-4 text-[#3D3D3D]">
-                      {item.name}
+                      {item.scientific_name}
                     </h1>
                     <h1 className="mt-1 cursor-default text-green-600 font-bold text-lg">
-                      $ {item.price}.00
+                      $ {item.id}.00
+                    </h1>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          {sorting === 1 && (
+            <div className="mt-8 grid grid-cols-2 gap-5 md:grid-cols-3 md:gap-8 ">
+              {flowers.slice(9, 18).map((item, index) => {
+                return (
+                  <div
+                    key={item.id}
+                    className={`${index % 2 != 0 ? "mt-5 md:mt-0" : ""}`}
+                  >
+                    <div className="bg-gray-100 rounded-2xl cursor-pointer">
+                      <NavLink to={"/shop"}>
+                        <img
+                          onClick={() => addCartShop(item)}
+                          src={item.image_url}
+                          alt="img"
+                          className="md:w-[250px] h-[150px] w-full rounded-t-lg md:h-[200px]"
+                        />
+                      </NavLink>
+                      <div
+                        onClick={() => addCartShop(item)}
+                        className="text-green-600 hover:bg-green-200 hidden md:flex mt-1 bg-gray-200 py-2 justify-center relative "
+                      >
+                        <ShoppingCartIcon />
+                      </div>
+                    </div>
+                    <h1 className="mt-4 cursor-default text-base font-normal leading-4 text-[#3D3D3D]">
+                      {item.scientific_name}
+                    </h1>
+                    <h1 className="mt-1 cursor-default text-green-600 font-bold text-lg">
+                      $ {item.id}.00
+                    </h1>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          {sorting === 2 && (
+            <div className="mt-8 grid grid-cols-2 gap-5 md:grid-cols-3 md:gap-8 ">
+              {flowers.slice(2, 11).map((item, index) => {
+                return (
+                  <div
+                    key={item.id}
+                    className={`${index % 2 != 0 ? "mt-5 md:mt-0" : ""}`}
+                  >
+                    <div className="bg-gray-100 rounded-2xl cursor-pointer">
+                      <NavLink to={"/shop"}>
+                        <img
+                          onClick={() => addCartShop(item)}
+                          src={item.image_url}
+                          alt="img"
+                          className="md:w-[250px] h-[150px] w-full rounded-t-lg md:h-[200px]"
+                        />
+                      </NavLink>
+                      <div
+                        onClick={() => addCartShop(item)}
+                        className="text-green-600 hover:bg-green-200 hidden md:flex mt-1 bg-gray-200 py-2 justify-center relative "
+                      >
+                        <ShoppingCartIcon />
+                      </div>
+                    </div>
+                    <h1 className="mt-4 cursor-default text-base font-normal leading-4 text-[#3D3D3D]">
+                      {item.scientific_name}
+                    </h1>
+                    <h1 className="mt-1 cursor-default text-green-600 font-bold text-lg">
+                      $ {item.id}.00
                     </h1>
                   </div>
                 );
@@ -197,14 +279,16 @@ const Home = ({ count, setCount }) => {
           )}
         </div>
       </div>
-      <div className="flex flex-col md:flex-row gap-10">
+      <div className="flex flex-col md:justify-between md:flex-row gap-10">
         <div className="flex rounded items-center bg-gray-100 py-6 px-0 pr-3">
           <div>
-            <img
-              src={Jsonn[0].image}
-              alt="img"
-              className="md:w-[200px] w-[200px] h-[160px] md:h-[200px]"
-            />
+            {flowers.length > 5 && flowers[5].image_url && (
+              <img
+                src={flowers[5].image_url}
+                alt="img"
+                className="md:w-[200px] ml-10 rounded-xl w-[200px] h-[160px] md:h-[200px]"
+              />
+            )}
           </div>
           <div className="text-right space-y-3 pl-6">
             <h1 className="md:text-lg text-base font-black leading-6 text-right">
@@ -221,11 +305,13 @@ const Home = ({ count, setCount }) => {
         </div>
         <div className="flex rounded items-center bg-gray-100 py-6 px-0 pr-3">
           <div>
-            <img
-              src={Jsonn[4].image}
-              alt="img"
-              className="md:w-[200px] md:h-[200px] w-[200px] h-[160px]"
-            />
+            {flowers.length > 6 && flowers[6].image_url && (
+              <img
+                src={flowers[6].image_url}
+                alt="img"
+                className="md:w-[200px] ml-10 rounded-xl w-[200px] h-[160px] md:h-[200px]"
+              />
+            )}
           </div>
           <div className="text-right space-y-3 pl-6">
             <h1 className="md:text-lg text-base font-black leading-6 text-right">
@@ -252,7 +338,13 @@ const Home = ({ count, setCount }) => {
         <div className="md:flex md:justify-between grid grid-cols-2 md:gap-0 gap-4 mt-5">
           <div className="bg-gray-100 rounded-lg md:w-[22%]">
             <div className="bg-white flex justify-center h-[165px]  md:h-[150px] pb-3">
-              <img src={Jsonn[5].image} alt="img" />
+              {flowers.length > 5 && flowers[5].image_url && (
+                <img
+                  src={flowers[5].image_url}
+                  alt="img"
+                  className="rounded-xl"
+                />
+              )}
             </div>
             <div className=" space-y-1 p-4">
               <p className="text-green-600 font-medium text-sm">
@@ -271,7 +363,13 @@ const Home = ({ count, setCount }) => {
           </div>
           <div className="bg-gray-100 rounded-lg md:w-[22%]">
             <div className="bg-white flex justify-center h-[165px]  md:h-[150px] pb-3">
-              <img src={Jsonn[4].image} alt="img" />
+              {flowers.length > 2 && flowers[2].image_url && (
+                <img
+                  src={flowers[2].image_url}
+                  alt="img"
+                  className="rounded-xl"
+                />
+              )}
             </div>
             <div className=" space-y-1 p-4">
               <p className="text-green-600 font-medium text-sm">
@@ -290,7 +388,13 @@ const Home = ({ count, setCount }) => {
           </div>
           <div className="bg-gray-100 rounded-lg md:w-[22%]">
             <div className="bg-white flex justify-center h-[165px]  md:h-[150px] pb-3">
-              <img src={Jsonn[6].image} alt="img" />
+              {flowers.length > 0 && flowers[0].image_url && (
+                <img
+                  src={flowers[0].image_url}
+                  alt="img"
+                  className="rounded-xl md:mx-8 w-[100%]"
+                />
+              )}
             </div>
             <div className=" space-y-1 p-4">
               <p className="text-green-600 font-medium text-sm">
@@ -308,8 +412,14 @@ const Home = ({ count, setCount }) => {
             </div>
           </div>
           <div className="bg-gray-100 rounded-lg md:w-[22%]">
-            <div className="bg-white flex justify-center h-[165px] md:h-[150px] pb-3">
-              <img src={Jsonn[7].image} alt="img" />
+            <div className="bg-white flex justify-center h-[165px]  md:h-[150px] pb-3">
+              {flowers.length > 4 && flowers[4].image_url && (
+                <img
+                  src={flowers[4].image_url}
+                  alt="img"
+                  className="rounded-xl md:mx-8 w-[100%]"
+                />
+              )}
             </div>
             <div className=" space-y-1 p-4">
               <p className="text-green-600 font-medium text-sm">

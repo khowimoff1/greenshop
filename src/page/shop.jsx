@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeItem } from "./CartMenu";
 import Rating from "@mui/material/Rating";
@@ -8,7 +8,8 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import { Json } from "./Json";
+import { fetchData } from "../data/dataJson";
+
 const Shop = ({ shopCart, setShopCart,count,setCount }) => {
   const [resCart, setResCart] = useState(false);
   const dispatch = useDispatch();
@@ -22,32 +23,50 @@ const Shop = ({ shopCart, setShopCart,count,setCount }) => {
       setSelectCout(selectCout - 1);
     }
   };
+   const [flowers, setFlowers] = useState([]);
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await fetchData();
+        setFlowers(data);
+      } catch (error) {
+        console.error("Xatolik:", error);
+      }
+    };
+
+    fetchDataAsync();
+  }, []);
+
 
   return (
     <div className="container mx-auto w-full max-w-6xl px-4 md:mt-10">
       {!shopCart && select.length > 0 && (
         <div>
           <div className="md:hidden mt-4 flex justify-center">
-            <img src={select[0].image} alt="image" className="w-[150px] h-[130px]" />
+            <img
+              src={select[0].image_url}
+              alt="image"
+              className="w-[250px] h-[230px]"
+            />
           </div>
           <div className="flex justify-between cursor-pointer ">
             <div className="md:flex hidden items-center gap-10 ">
               <div className=" space-y-2">
                 <div className="bg-[#FBFBFB] rounded p-4">
-                  <img src={select[0].image} alt="img" className="w-24 h-20" />
+                  <img src={select[0].image_url} alt="img" className="w-24 h-20" />
                 </div>
                 <div className="bg-[#FBFBFB] rounded p-4">
-                  <img src={select[0].image} alt="img" className="w-24 h-20" />
+                  <img src={select[0].image_url} alt="img" className="w-24 h-20" />
                 </div>
                 <div className="bg-[#FBFBFB] rounded p-4">
-                  <img src={select[0].image} alt="img" className="w-24 h-20" />
+                  <img src={select[0].image_url} alt="img" className="w-24 h-20" />
                 </div>
                 <div className="bg-[#FBFBFB] rounded p-4">
-                  <img src={select[0].image} alt="img" className="w-24 h-20" />
+                  <img src={select[0].image_url} alt="img" className="w-24 h-20" />
                 </div>
               </div>
               <div className="bg-[#FBFBFB] p-10 h-full flex items-center">
-                <img src={select[0].image} alt="img" className="w-56 h-56" />
+                <img src={select[0].image_url} alt="img" className="w-56 h-56" />
               </div>
             </div>
             <div className="md:w-2/4 flex flex-col justify-between">
@@ -247,10 +266,10 @@ const Shop = ({ shopCart, setShopCart,count,setCount }) => {
                         resCart ? " right-20 md:right-0" : ""
                       } absolute z-10 md:relative w-[93%] md:w-full flex items-center justify-between md:bg-[#FBFBFB] bg-white border shadow-2xl  md:py-2 px-3 rounded-lg`}
                     >
-                      <img src={item.image} alt="image" width={"70px"} />
+                      <img src={item.image_url} alt="image" width={"70px"} className="md:w-[90px] md:h-[90px]"/>
                       <div className="md:flex items-center justify-between">
                         <div>
-                          <h1>{item.name}</h1>
+                          <h1>{item.scientific_name}</h1>
                           <p className="text-sm leading-4 md:flex hidden text-[#A5A5A5]">
                             SKU:{" "}
                             <span className="text-[#727272]">
@@ -259,7 +278,7 @@ const Shop = ({ shopCart, setShopCart,count,setCount }) => {
                           </p>
                         </div>
                         <h1 className=" font-medium text-base text-green-600 md:ml-10">
-                          ${item.price}.00
+                          ${item.id}.00
                         </h1>
                       </div>
                       <div className="flex items-center gap-2">
@@ -272,7 +291,7 @@ const Shop = ({ shopCart, setShopCart,count,setCount }) => {
                         </button>
                       </div>
                       <h1 className="font-bold md:block hidden text-base text-green-600">
-                        ${item.price}.00
+                        ${item.id}.00
                       </h1>
                       <button
                         onClick={() => {
@@ -369,51 +388,101 @@ const Shop = ({ shopCart, setShopCart,count,setCount }) => {
         <div className="flex gap-7 md:gap-8 md:justify-between mt-10">
           <div className="gap-4 md:gap-8 flex md:flex-row flex-col">
             <div>
-              <div className="bg-gray-400 p-3 rounded md:w-[200px] w-[180px] h-[170px] md:h-auto">
-                <img src={Json[0].image} alt="" />
-              </div>
-              <h1 className="text-[#3D3D3D] text-[15px]">{Json[0].name}</h1>
-              <h1 className="text-green-600 font-bold text-base">
-                ${Json[0].price}.00
-              </h1>
+              {flowers[4] && (
+                <>
+                  <div className="bg-gray-400 rounded-xl md:w-[200px] w-[180px]">
+                    <img
+                      src={flowers[4].image_url}
+                      alt="img"
+                      className="w-full md:h-[200px] h-[185px] rounded-xl"
+                    />
+                  </div>
+                  <h1 className="text-[#3D3D3D] text-[15px]">
+                    {flowers[4].scientific_name}
+                  </h1>
+                  <h1 className="text-green-600 font-bold text-base">
+                    ${flowers[4].id}.00
+                  </h1>
+                </>
+              )}
             </div>
             <div>
-              <div className="bg-gray-400 p-3 rounded flex md:w-[200px] w-[180px] h-[170px] md:h-[186px]">
-                <img src={Json[1].image} alt="" />
-              </div>
-              <h1 className="text-[#3D3D3D] text-[15px]">{Json[1].name}</h1>
-              <h1 className="text-green-600 font-bold text-base">
-                ${Json[1].price}.00
-              </h1>
+              {flowers[5] && (
+                <>
+                  <div className="bg-gray-400 rounded-xl md:w-[200px] w-[180px] ">
+                    <img
+                      src={flowers[5].image_url}
+                      alt="img"
+                      className="w-full md:h-[200px] h-[180px] rounded-xl"
+                    />
+                  </div>
+                  <h1 className="text-[#3D3D3D] text-[15px]">
+                    {flowers[5].scientific_name}
+                  </h1>
+                  <h1 className="text-green-600 font-bold text-base">
+                    ${flowers[5].id}.00
+                  </h1>
+                </>
+              )}
             </div>
             <div>
-              <div className="bg-gray-400 p-3 rounded md:w-[200px] w-[180px] h-[175px] md:h-[186px] md:flex">
-                <img src={Json[4].image} alt="" />
-              </div>
-              <h1 className="text-[#3D3D3D] text-[15px]">{Json[4].name}</h1>
-              <h1 className="text-green-600 font-bold text-base">
-                ${Json[4].price}.00
-              </h1>
+              {flowers[6] && (
+                <>
+                  <div className="bg-gray-400 rounded-xl md:w-[200px] w-[180px]">
+                    <img
+                      src={flowers[6].image_url}
+                      alt="img"
+                      className="w-full h-[186px] md:h-[200px] rounded-xl"
+                    />
+                  </div>
+                  <h1 className="text-[#3D3D3D] text-[15px]">
+                    {flowers[6].scientific_name}
+                  </h1>
+                  <h1 className="text-green-600 font-bold text-base">
+                    ${flowers[6].id}.00
+                  </h1>
+                </>
+              )}
             </div>
           </div>
           <div className="flex flex-col md:flex-row md:gap-8 gap-4 md:justify-normal justify-around">
             <div>
-              <div className="bg-gray-400 p-3 rounded md:w-[200px] w-[180px] h-[170px] flex md:h-[185px]">
-                <img src={Json[7].image} alt="" />
-              </div>
-              <h1 className="text-[#3D3D3D] text-[15px]">{Json[7].name}</h1>
-              <h1 className="text-green-600 font-bold text-base">
-                ${Json[7].price}.00
-              </h1>
+              {flowers[7] && (
+                <>
+                  <div className="bg-gray-400 rounded-xl md:w-[200px] w-[180px]o">
+                    <img
+                      src={flowers[7].image_url}
+                      alt="img"
+                      className="w-full h-[186px] md:h-[200px] rounded-xl"
+                    />
+                  </div>
+                  <h1 className="text-[#3D3D3D] text-[15px]">
+                    {flowers[7].scientific_name}
+                  </h1>
+                  <h1 className="text-green-600 font-bold text-base">
+                    ${flowers[7].id}.00
+                  </h1>
+                </>
+              )}
             </div>
             <div>
-              <div className="bg-gray-400 p-3 rounded md:w-[200px] w-[180px] h-[175px] md:h-[185px]">
-                <img src={Json[6].image} alt="" />
-              </div>
-              <h1 className="text-[#3D3D3D] text-[15px]">{Json[0].name}</h1>
-              <h1 className="text-green-600 font-bold text-base">
-                ${Json[0].price}.00
-              </h1>
+              {flowers[8] && (
+                <>
+                  <div className="bg-gray-400 rounded-xl md:w-[200px] w-[180px]">
+                    <img
+                      src={flowers[8].image_url}
+                      alt="img"
+                      className="w-full h-[186px] md:h-[200px] rounded-xl"
+                    />
+                  </div>
+                  <h1 className="text-[#3D3D3D] text-[15px]">
+                    {flowers[8].scientific_name}
+                  </h1>
+                  <h1 className="text-green-600 font-bold text-base">
+                    ${flowers[8].id}.00
+                  </h1>
+                </>
+              )}
             </div>
           </div>
         </div>
