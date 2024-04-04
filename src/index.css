@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.nav a.active{
+    color: black;
+    font-weight: bold;
+    padding-bottom: 24px;
+    border-bottom: 4px solid greenyellow;
+}
+.res_nav.active{
+    color: greenyellow;
+}
