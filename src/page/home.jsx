@@ -163,7 +163,7 @@ const Home = ({ count, setCount }) => {
                 Sale
               </li>
             </ul>
-            <div className="md:flex hidden">
+            <div className="md:flex hidden  items-center">
               <p className="text-sm font-normal leading-4 text-[#3D3D3D]">
                 Short by:
               </p>
@@ -279,7 +279,7 @@ const Home = ({ count, setCount }) => {
           )}
         </div>
       </div>
-      <div className="flex flex-col md:justify-between md:flex-row gap-10">
+      <div className="flex flex-col md:justify-center md:flex-row gap-10">
         <div className="flex rounded items-center bg-gray-100 py-6 px-0 pr-3">
           <div>
             {flowers.length > 5 && flowers[5].image_url && (
