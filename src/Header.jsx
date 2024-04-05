@@ -125,9 +125,6 @@ const Header = ({ setShopCart,count }) => {
           />
         </label>
         <button
-          onClick={() => {
-            setIsLink("true");
-          }}
           className="bg-green-800 hover:bg-green-500 text-white rounded-xl px-3"
         >
           <img src={respons} width={"25px"} height={"22px"} />

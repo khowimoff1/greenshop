@@ -27,7 +27,12 @@ const Footer = () => {
               </p>
             </div>
             <div className="px-5 border-r-2">
-              <img src={Json[4].image} alt="img" width={"150px"} className="h-[137px]" />
+              <img
+                src={Json[4].image}
+                alt="img"
+                width={"150px"}
+                className="h-[137px]"
+              />
               <h1 className="mt-3 font-bold text-[17px]">Plant Renovation</h1>
               <p className="text-[#727272] mt-2">
                 We are an online plant shop offering a wide range of cheap and
@@ -35,7 +40,12 @@ const Footer = () => {
               </p>
             </div>
             <div className="px-5 ">
-              <img src={Json[5].image} alt="img" width={"150px"} className="h-[137px]"/>
+              <img
+                src={Json[5].image}
+                alt="img"
+                width={"150px"}
+                className="h-[137px]"
+              />
               <h1 className="mt-3 font-bold text-[17px]">Watering Graden</h1>
               <p className="text-[#727272] mt-2">
                 We are an online plant shop offering a wide range of cheap and
@@ -156,21 +166,37 @@ const Footer = () => {
             <div>
               <h1 className="font-bold text-lg">Social Media</h1>
               <div className="flex gap-3 mt-2">
-                <div className="py-3 px-4 cursor-pointer border border-green-300 rounded-lg hover:bg-yellow-300">
+                <a
+                  href="https://facebook.com"
+                  className="py-3 px-4 cursor-pointer border border-green-300 rounded-lg hover:bg-yellow-300"
+                >
                   <img src={facebook} alt="img" />
-                </div>
-                <div className="py-3 px-3 cursor-pointer border border-green-300 rounded-lg hover:bg-yellow-300">
+                </a>
+                <a
+                  href="https://instagram.com"
+                  className="py-3 px-4 cursor-pointer border border-green-300 rounded-lg hover:bg-yellow-300"
+                >
                   <img src={instagram} alt="img" />
-                </div>
-                <div className="py-3 px-3 cursor-pointer border border-green-300 rounded-lg hover:bg-yellow-300">
+                </a>
+                <a
+                  href="https://twitter.com"
+                  className="py-3 px-4 cursor-pointer border border-green-300 rounded-lg hover:bg-yellow-300"
+                >
                   <img src={twitter} alt="img" />
-                </div>
-                <div className="py-3 px-3 cursor-pointer border border-green-300 rounded-lg hover:bg-yellow-300">
+                </a>
+                <a
+                  href="https://linkedin.com"
+                  className="py-3 px-4 cursor-pointer border border-green-300 rounded-lg hover:bg-yellow-300"
+                >
                   <img src={linkedin} alt="img" />
-                </div>
-                <div className="py-3 px-3 cursor-pointer border border-green-300 rounded-lg hover:bg-yellow-300">
+                </a>
+                <a
+                  href="https://youtobe.com"
+                  className="py-3 px-4 cursor-pointer border border-green-300 rounded-lg hover:bg-yellow-300"
+                >
                   <img src={union} alt="img" />
-                </div>
+                </a>
+                
               </div>
             </div>
             <div>
@@ -180,7 +206,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="flex justify-center mb-12">
+      <div className="flex  justify-center mb-12">
         <p className="text-sm text-[#3D3D3D] leading-[30px]">
           © 2024 GreenShop.By Xoshimov Sardorbek.
         </p>

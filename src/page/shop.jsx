@@ -10,20 +10,29 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { fetchData } from "../data/dataJson";
 
-const Shop = ({ shopCart, setShopCart,count,setCount }) => {
+const Shop = ({ shopCart, setShopCart, count, setCount }) => {
   const [resCart, setResCart] = useState(false);
+  const [description, setDescription] = useState(true);
+  const [priceCount, setPriceCount] = useState(0);
   const dispatch = useDispatch();
   const select = useSelector((e) => e.flowers);
-  const [selectCout,setSelectCout] = useState(1);
+  const [selectCout, setSelectCout] = useState(1);
+  const lastIndex = select.length - 1;
   const increment = () => {
-     setSelectCout(selectCout + 1)
-  }
+    setSelectCout(selectCout + 1);
+  };
   const decrement = () => {
-    if(selectCout > 1){
+    if (selectCout > 1) {
       setSelectCout(selectCout - 1);
     }
   };
-   const [flowers, setFlowers] = useState([]);
+  const [flowers, setFlowers] = useState([]);
+
+  const totalPrice = () => {
+    select.map((item) => {
+      setPriceCount(prev=> (prev + +item.id));
+    });
+  };
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {
@@ -33,18 +42,20 @@ const Shop = ({ shopCart, setShopCart,count,setCount }) => {
         console.error("Xatolik:", error);
       }
     };
-
+    totalPrice();
     fetchDataAsync();
   }, []);
 
-
+  
+ 
+  
   return (
     <div className="container mx-auto w-full max-w-6xl px-4 md:mt-10">
       {!shopCart && select.length > 0 && (
         <div>
           <div className="md:hidden mt-4 flex justify-center">
             <img
-              src={select[0].image_url}
+              src={select[lastIndex].image_url}
               alt="image"
               className="w-[250px] h-[230px]"
             />
@@ -53,30 +64,50 @@ const Shop = ({ shopCart, setShopCart,count,setCount }) => {
             <div className="md:flex hidden items-center gap-10 ">
               <div className=" space-y-2">
                 <div className="bg-[#FBFBFB] rounded p-4">
-                  <img src={select[0].image_url} alt="img" className="w-24 h-20" />
+                  <img
+                    src={select[0].image_url}
+                    alt="img"
+                    className="w-24 h-20"
+                  />
                 </div>
                 <div className="bg-[#FBFBFB] rounded p-4">
-                  <img src={select[0].image_url} alt="img" className="w-24 h-20" />
+                  <img
+                    src={select[0].image_url}
+                    alt="img"
+                    className="w-24 h-20"
+                  />
                 </div>
                 <div className="bg-[#FBFBFB] rounded p-4">
-                  <img src={select[0].image_url} alt="img" className="w-24 h-20" />
+                  <img
+                    src={select[0].image_url}
+                    alt="img"
+                    className="w-24 h-20"
+                  />
                 </div>
                 <div className="bg-[#FBFBFB] rounded p-4">
-                  <img src={select[0].image_url} alt="img" className="w-24 h-20" />
+                  <img
+                    src={select[0].image_url}
+                    alt="img"
+                    className="w-24 h-20"
+                  />
                 </div>
               </div>
               <div className="bg-[#FBFBFB] p-10 h-full flex items-center">
-                <img src={select[0].image_url} alt="img" className="w-56 h-56" />
+                <img
+                  src={select[0].image_url}
+                  alt="img"
+                  className="w-56 h-56"
+                />
               </div>
             </div>
             <div className="md:w-2/4 flex flex-col justify-between">
               <div className="flex md:flex-col items-center md:items-start justify-between md:justify-normal">
                 <h1 className=" md:text-[28px] text-[20px] font-medium md:font-bold leading-4">
-                  {select[0].name}
+                  {select[0].scientific_name}
                 </h1>
                 <div className="flex justify-between mt-5 md:w-full  border-b pb-4 items-center">
                   <h1 className="text-green-500 md:block hidden text-[22px] font-bold leading-4">
-                    ${select[0].price}.00
+                    ${select[0].id}.00
                   </h1>
                   <div className="md:flex hidden  gap-2 items-center">
                     <Stack spacing={1}>
@@ -95,7 +126,7 @@ const Shop = ({ shopCart, setShopCart,count,setCount }) => {
                 Short Description:
               </h1>
               <p className="text-[12px] text-[#727272] mt-5 pr-4 md:mt-0">
-                {select[0].description}
+                {select[0].slug}
               </p>
               <h1 className="font-medium text-[15px] md:mt-0 mt-5 md:mb-0 mb-3 text-[#3D3D3D]">
                 Size:
@@ -176,68 +207,147 @@ const Shop = ({ shopCart, setShopCart,count,setCount }) => {
           </div>
           <div className="mt-20">
             <div className="flex gap-5 border-b">
-              <h1 className="cursor-pointer hover:text-green-600 text-[17px] font-bold leading-4 text-green-600 border-b-4 border-green-700 pb-4">
+              <button
+                onClick={() => setDescription(true)}
+                className={`${
+                  description
+                    ? "text-green-600 border-b-4 border-green-700"
+                    : "text-gray-500"
+                } hover:text-green-600 text-[17px] font-bold leading-4 pb-4`}
+              >
                 Product Description
-              </h1>
-              <h1 className="cursor-pointer hover:text-green-600 text-[17px] font-bold leading-4 text-gray-500">
+              </button>
+              <button
+                onClick={() => setDescription(false)}
+                className={`${
+                  !description
+                    ? "text-green-600 border-b-4 border-green-700"
+                    : "text-gray-500"
+                } hover:text-green-600 text-[17px] font-bold leading-4 pb-4`}
+              >
                 Reviews (19)
-              </h1>
+              </button>
             </div>
-            <div className="mt-10">
-              <p className="text-sm text-[#727272]">
-                The ceramic cylinder planters come with a wooden stand to help
-                elevate your plants off the ground. The ceramic cylinder
-                planters come with a wooden stand to help elevate your plants
-                off the ground. Lorem ipsum dolor sit amet, consectetur
-                adipiscing elit. Nam fringilla augue nec est tristique auctor.
-                Donec non est at libero vulputate rutrum. Morbi ornare lectus
-                quis justo gravida semper. Nulla tellus mi, vulputate adipiscing
-                cursus eu, suscipit id nulla.
-                <br />
-                <br />
-                Pellentesque aliquet, sem eget laoreet ultrices, ipsum metus
-                feugiat sem, quis fermentum turpis eros eget velit. Donec ac
-                tempus ante. Fusce ultricies massa massa. Fusce aliquam, purus
-                eget sagittis vulputate, sapien libero hendrerit est, sed
-                commodo augue nisi non neque. Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit. Sed tempor, lorem et placerat
-                vestibulum, metus nisi posuere nisl, in accumsan elit odio quis
-                mi. Cras neque metus, consequat et blandit et, luctus a nunc.
-                Etiam gravida vehicula tellus, in imperdiet ligula euismod eget.
-                The ceramic cylinder planters come with a wooden stand to help
-                elevate your plants off the ground.
-              </p>
-            </div>
-            <div className="mt-10">
-              <h1 className=" font-bold text-sm">Living Room:</h1>
-              <p className="text-sm text-[#727272] mt-2">
-                The ceramic cylinder planters come with a wooden stand to help
-                elevate your plants off the ground. The ceramic cylinder
-                planters come with a wooden stand to help elevate your plants
-                off the ground. Lorem ipsum dolor sit amet, consectetur
-                adipiscing elit.
-              </p>
-            </div>
-            <div className="mt-10">
-              <h1 className=" font-bold text-sm">Dining Room:</h1>
-              <p className="text-sm text-[#727272] mt-2">
-                The benefits of houseplants are endless. In addition to cleaning
-                the air of harmful toxins, they can help to improve your mood,
-                reduce stress and provide you with better sleep. Fill every room
-                of your home with houseplants and their restorative qualities
-                will improve your life.
-              </p>
-            </div>
-            <div className="mt-10">
-              <h1 className=" font-bold text-sm">Office:</h1>
-              <p className="text-sm text-[#727272] mt-2">
-                The ceramic cylinder planters come with a wooden stand to help
-                elevate your plants off the ground. The ceramic cylinder
-                planters come with a wooden stand to help elevate your plants
-                off the ground. Lorem ipsum dolor sit amet, consectetur
-                adipiscing elit.
-              </p>
-            </div>
+            {description && (
+              <div>
+                <div className="mt-10">
+                  <p className="text-sm text-[#727272]">
+                    The ceramic cylinder planters come with a wooden stand to
+                    help elevate your plants off the ground. The ceramic
+                    cylinder planters come with a wooden stand to help elevate
+                    your plants off the ground. Lorem ipsum dolor sit amet,
+                    consectetur adipiscing elit. Nam fringilla augue nec est
+                    tristique auctor. Donec non est at libero vulputate rutrum.
+                    Morbi ornare lectus quis justo gravida semper. Nulla tellus
+                    mi, vulputate adipiscing cursus eu, suscipit id nulla.
+                    <br />
+                    <br />
+                    Pellentesque aliquet, sem eget laoreet ultrices, ipsum metus
+                    feugiat sem, quis fermentum turpis eros eget velit. Donec ac
+                    tempus ante. Fusce ultricies massa massa. Fusce aliquam,
+                    purus eget sagittis vulputate, sapien libero hendrerit est,
+                    sed commodo augue nisi non neque. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit. Sed tempor, lorem et
+                    placerat vestibulum, metus nisi posuere nisl, in accumsan
+                    elit odio quis mi. Cras neque metus, consequat et blandit
+                    et, luctus a nunc. Etiam gravida vehicula tellus, in
+                    imperdiet ligula euismod eget. The ceramic cylinder planters
+                    come with a wooden stand to help elevate your plants off the
+                    ground.
+                  </p>
+                </div>
+                <div className="mt-10">
+                  <h1 className=" font-bold text-sm">Living Room:</h1>
+                  <p className="text-sm text-[#727272] mt-2">
+                    The ceramic cylinder planters come with a wooden stand to
+                    help elevate your plants off the ground. The ceramic
+                    cylinder planters come with a wooden stand to help elevate
+                    your plants off the ground. Lorem ipsum dolor sit amet,
+                    consectetur adipiscing elit.
+                  </p>
+                </div>
+                <div className="mt-10">
+                  <h1 className=" font-bold text-sm">Dining Room:</h1>
+                  <p className="text-sm text-[#727272] mt-2">
+                    The benefits of houseplants are endless. In addition to
+                    cleaning the air of harmful toxins, they can help to improve
+                    your mood, reduce stress and provide you with better sleep.
+                    Fill every room of your home with houseplants and their
+                    restorative qualities will improve your life.
+                  </p>
+                </div>
+                <div className="mt-10">
+                  <h1 className=" font-bold text-sm">Office:</h1>
+                  <p className="text-sm text-[#727272] mt-2">
+                    The ceramic cylinder planters come with a wooden stand to
+                    help elevate your plants off the ground. The ceramic
+                    cylinder planters come with a wooden stand to help elevate
+                    your plants off the ground. Lorem ipsum dolor sit amet,
+                    consectetur adipiscing elit.
+                  </p>
+                </div>
+              </div>
+            )}
+            {!description && (
+              <div>
+                <div className="mt-10">
+                  <p className="text-sm text-[#727272]">
+                    Pellentesque aliquet, sem eget laoreet ultrices, ipsum metus
+                    feugiat sem, quis fermentum turpis eros eget velit. Donec ac
+                    tempus ante. Fusce ultricies massa massa. Fusce aliquam,
+                    purus eget sagittis vulputate, sapien libero hendrerit est,
+                    sed commodo augue nisi non neque. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit. Sed tempor, lorem et
+                    placerat vestibulum, metus nisi posuere nisl, in accumsan
+                    elit odio quis mi. Cras neque metus, consequat et blandit
+                    et, luctus a nunc. Etiam gravida vehicula tellus, in
+                    imperdiet ligula euismod eget. The ceramic cylinder planters
+                    come with a wooden stand to help elevate your plants off the
+                    ground.
+                    <br />
+                    <br />
+                    The ceramic cylinder planters come with a wooden stand to
+                    help elevate your plants off the ground. The ceramic
+                    cylinder planters come with a wooden stand to help elevate
+                    your plants off the ground. Lorem ipsum dolor sit amet,
+                    consectetur adipiscing elit. Nam fringilla augue nec est
+                    tristique auctor. Donec non est at libero vulputate rutrum.
+                    Morbi ornare lectus quis justo gravida semper. Nulla tellus
+                    mi, vulputate adipiscing cursus eu, suscipit id nulla.
+                  </p>
+                </div>
+                <div className="mt-10">
+                  <h1 className=" font-bold text-sm">Dining Room:</h1>
+                  <p className="text-sm text-[#727272] mt-2">
+                    The benefits of houseplants are endless. In addition to
+                    cleaning the air of harmful toxins, they can help to improve
+                    your mood, reduce stress and provide you with better sleep.
+                    Fill every room of your home with houseplants and their
+                    restorative qualities will improve your life.
+                  </p>
+                </div>
+                <div className="mt-10">
+                  <h1 className=" font-bold text-sm">Living Room:</h1>
+                  <p className="text-sm text-[#727272] mt-2">
+                    The ceramic cylinder planters come with a wooden stand to
+                    help elevate your plants off the ground. The ceramic
+                    cylinder planters come with a wooden stand to help elevate
+                    your plants off the ground. Lorem ipsum dolor sit amet,
+                    consectetur adipiscing elit.
+                  </p>
+                </div>
+                <div className="mt-10">
+                  <h1 className=" font-bold text-sm">Office:</h1>
+                  <p className="text-sm text-[#727272] mt-2">
+                    The ceramic cylinder planters come with a wooden stand to
+                    help elevate your plants off the ground. The ceramic
+                    cylinder planters come with a wooden stand to help elevate
+                    your plants off the ground. Lorem ipsum dolor sit amet,
+                    consectetur adipiscing elit.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -255,7 +365,7 @@ const Shop = ({ shopCart, setShopCart,count,setCount }) => {
               <h1 className=" text-base font-medium leading-4 ml-16">Total</h1>
             </div>
             <div>
-              {select.map((item) => {
+              {select.map((item,index) => {
                 return (
                   <div key={item.id} className="md:mt-6 flex md:flex-col gap-5">
                     <div
@@ -266,7 +376,12 @@ const Shop = ({ shopCart, setShopCart,count,setCount }) => {
                         resCart ? " right-20 md:right-0" : ""
                       } absolute z-10 md:relative w-[93%] md:w-full flex items-center justify-between md:bg-[#FBFBFB] bg-white border shadow-2xl  md:py-2 px-3 rounded-lg`}
                     >
-                      <img src={item.image_url} alt="image" width={"70px"} className="md:w-[90px] md:h-[90px]"/>
+                      <img
+                        src={item.image_url}
+                        alt="image"
+                        width={"70px"}
+                        className="md:w-[90px] md:h-[90px]"
+                      />
                       <div className="md:flex items-center justify-between">
                         <div>
                           <h1>{item.scientific_name}</h1>
@@ -297,6 +412,7 @@ const Shop = ({ shopCart, setShopCart,count,setCount }) => {
                         onClick={() => {
                           dispatch(removeItem(item.id));
                           setCount(count - 1);
+                          setPriceCount((prev) => prev - +item.id);
                         }}
                         className="hover:text-green-600 md:block hidden"
                       >
@@ -346,7 +462,7 @@ const Shop = ({ shopCart, setShopCart,count,setCount }) => {
               <div className="flex items-center justify-between">
                 <h1 className="text-[15px] text-[#3D3D3D]">Subtotal</h1>
                 <h1 className=" font-medium text-lg text-[#3D3D3D]">
-                  $2,683.00
+                  ${priceCount}.00
                 </h1>
               </div>
               <div className="flex items-center justify-between">
@@ -363,7 +479,9 @@ const Shop = ({ shopCart, setShopCart,count,setCount }) => {
             </h1>
             <div className="flex items-center justify-between mt-5 mb-5">
               <h1 className="font-bold text-base">Total</h1>
-              <h1 className="font-bold text-lg text-green-600">$2,699.00</h1>
+              <h1 className="font-bold text-lg text-green-600">
+                ${priceCount + 16}.00
+              </h1>
             </div>
             <div>
               <button className="font-bold text-[15px] text-white bg-green-600 w-full rounded-lg py-3 flex justify-center items-center hover:bg-green-500">
