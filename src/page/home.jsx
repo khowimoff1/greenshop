@@ -41,7 +41,6 @@ const Home = ({ count, setCount }) => {
         console.error("Xatolik:", error);
       }
     };
-
     fetchDataAsync();
   }, []);
   return (

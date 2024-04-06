@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../public/Logo.svg";
 import logo0 from "../public/Logo (1).svg";
 import search from "../public/Vector.svg";
@@ -10,25 +10,23 @@ import HomeIcon from "@mui/icons-material/Home";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
 import PersonIcon from "@mui/icons-material/Person";
+import { fetchData } from "./data/dataJson";
+import { useDispatch } from "react-redux";
+import { addItem } from "./page/CartMenu";
 
-const Header = ({ setShopCart,count }) => {
+const Header = ({ setShopCart, count, setCount }) => {
   const [inputSearch, setInputSearch] = useState("hidden");
-
   const searchClick = () => {
     setInputSearch("flex");
+    console.log(flowers);
   };
   const closeClick = () => {
     setInputSearch("hidden");
+    setSearchInputV("hidden");
   };
-  const Search = (e) => {
-    e.preventDefault();
-  };
-
   const [loginPage, setLoginPage] = useState("hidden");
-
   const [login, setLogin] = useState(true);
   const [register, setRegister] = useState(false);
-
   const LoginPage = () => {
     setLogin(true);
     setRegister(false);
@@ -37,18 +35,48 @@ const Header = ({ setShopCart,count }) => {
     setRegister(true);
     setLogin(false);
   };
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoginPage("hidden");
   };
-  const handleSubmitRegister = (e) => {
+  const [searchInput, setSearchInput] = useState("");
+  const [searchInputV, setSearchInputV] = useState("hidden");
+  const handleSearch = (e) => {
+    setSearchInput(e.target.value);
+    if (searchInput.length > 0) {
+      setSearchInputV("");
+    } else {
+      setSearchInputV("hidden");
+    }
+  };
+  const Search = (e) => {
     e.preventDefault();
-    setLoginPage("hidden");
+    setSearchInput("");
+  };
+  const [singleClick, setSingleClick] = useState([]);
+  const dispatch = useDispatch();
+  const addCartShop = (item) => {
+    if (!singleClick.includes(item.id)) {
+      setSingleClick([...singleClick, item.id]);
+      dispatch(addItem(item));
+      setInputSearch("hidden");
+      setSearchInputV("hidden");
+    }
   };
 
+  const [flowers, setFlowers] = useState([]);
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await fetchData();
+        setFlowers(data);
+      } catch (error) {
+        console.error("Xatolik:", error);
+      }
+    };
+    fetchDataAsync();
+  }, []);
   return (
     <>
       <div className="hidden container mx-auto w-full max-w-6xl pb-7 pt-10 md:flex items-center justify-between py-4">
@@ -72,8 +100,15 @@ const Header = ({ setShopCart,count }) => {
             <button onClick={searchClick}>
               <img src={search} alt="search" width={"20px"} />
             </button>
-            <NavLink to={"/shop"} onClick={() => {setShopCart(true)}}>
-              <div className=" absolute top-3 right-[110px] bg-green-600 rounded-full text-white px-2 ">{count}</div>
+            <NavLink
+              to={"/shop"}
+              onClick={() => {
+                setShopCart(true);
+              }}
+            >
+              <div className=" absolute top-3 right-[110px] bg-green-600 rounded-full text-white px-2 ">
+                {count}
+              </div>
               <img src={korzinka} alt="korzinka" width={"20px"} />
             </NavLink>
             <button
@@ -88,7 +123,9 @@ const Header = ({ setShopCart,count }) => {
           </div>
           <form
             onSubmit={Search}
-            className={`${inputSearch} justify-between backdrop-blur-md rounded-lg absolute container mx-auto w-full max-w-6xl bg-green-700 bg-opacity-35 px-4 py-5`}
+            value={searchInput}
+            onChange={handleSearch}
+            className={`${inputSearch} justify-between backdrop-blur-md rounded-t-lg absolute container mx-auto w-full max-w-6xl bg-green-700 bg-opacity-35 px-4 py-5`}
           >
             <label id="search" className="flex w-full">
               <input
@@ -97,22 +134,46 @@ const Header = ({ setShopCart,count }) => {
                 placeholder="Search"
                 className="w-[90%] placeholder-white text-lg bg-transparent outline-none text-green-900"
               />
-              <div className="flex gap-2">
-                <button
-                  type="submit"
-                  className="bg-green-800 hover:bg-green-500 text-white px-3 py-2 rounded-lg"
-                >
-                  SEARCH
-                </button>
-                <button
-                  onClick={closeClick}
-                  className="bg-green-800 hover:bg-green-500 text-white px-3 py-2 rounded-lg"
-                >
-                  CANCEL
-                </button>
-              </div>
+              <input
+                type="button"
+                onClick={closeClick}
+                value="CANCEL"
+                className="bg-green-800 hover:bg-green-500 text-white px-3 py-2 rounded-lg"
+              />
             </label>
           </form>
+          <div
+            className={`${searchInputV} bg-opacity-40 absolute z-10 rounded-b-2xl py-4 px-4 container mx-auto max-w-6xl bg-black w-full top-20`}
+          >
+            <div className="min-h-16 space-y-2">
+              {flowers.map((item) =>
+                item.scientific_name
+                  .toLowerCase()
+                  .includes(searchInput.toLowerCase()) &&
+                searchInput.length > 1 ? (
+                  <NavLink
+                    to={"/shop"}
+                    key={item.id}
+                    onClick={() => {
+                      addCartShop(item);
+                    }}
+                    className="flex bg-white py-2 px-3 items-center gap-10 hover:bg-green-500 hover:text-white rounded-xl cursor-pointer"
+                  >
+                    <div>
+                      <img
+                        src={item.image_url}
+                        alt=""
+                        width={80}
+                        height={80}
+                        className="rounded-lg"
+                      />
+                    </div>
+                    <h1>{item.scientific_name}</h1>
+                  </NavLink>
+                ) : null
+              )}
+            </div>
+          </div>
         </div>
       </div>
       <div className="container mx-auto flex md:hidden justify-between px-4 py-7">
@@ -124,9 +185,7 @@ const Header = ({ setShopCart,count }) => {
             placeholder="Find your plan"
           />
         </label>
-        <button
-          className="bg-green-800 hover:bg-green-500 text-white rounded-xl px-3"
-        >
+        <button className="bg-green-800 hover:bg-green-500 text-white rounded-xl px-3">
           <img src={respons} width={"25px"} height={"22px"} />
         </button>
       </div>
