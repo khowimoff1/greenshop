@@ -1,5 +1,4 @@
-{
-  "flowers": [
+export const Flowers = [ 
     {
       "id": 77116,
       "common_name": "Evergreen oak",
@@ -1426,14 +1425,4 @@
         "genus": "/api/v1/genus/filipendula"
       }
     }
-  ],
-  "links": {
-    "self": "/api/v1/plants",
-    "first": "/api/v1/plants?page=1",
-    "next": "/api/v1/plants?page=2",
-    "last": "/api/v1/plants?page=21863"
-  },
-  "meta": {
-    "total": 437255
-  }
-}
+]

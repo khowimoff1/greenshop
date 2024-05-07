@@ -7,13 +7,12 @@ import { NavLink } from "react-router-dom";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
-import { useEffect } from "react";
-import { fetchData } from "../data/dataJson";
+
+import { Flowers } from "../json/Flowers";
 
 function valuetext(value) {
   return `${value}°C`;
 }
-
 const Home = ({ count, setCount }) => {
   const [singleClick, setSingleClick] = useState([]);
   const dispatch = useDispatch();
@@ -30,19 +29,6 @@ const Home = ({ count, setCount }) => {
   };
   const [sorting, setSorting] = useState(0);
 
-  const [flowers, setFlowers] = useState([]);
-
-  useEffect(() => {
-    const fetchDataAsync = async () => {
-      try {
-        const data = await fetchData();
-        setFlowers(data);
-      } catch (error) {
-        console.error("Xatolik:", error);
-      }
-    };
-    fetchDataAsync();
-  }, []);
   return (
     <div className="container mx-auto w-full px-4 max-w-6xl mt-6 md:p-0 ">
       <Slick />
@@ -173,7 +159,7 @@ const Home = ({ count, setCount }) => {
           </div>
           {sorting === 0 && (
             <div className="mt-8 grid grid-cols-2 gap-5 md:grid-cols-3 md:gap-8 ">
-              {flowers.slice(0, 9).map((item, index) => {
+              {Flowers.slice(0, 9).map((item, index) => {
                 return (
                   <div
                     key={item.id}
@@ -208,7 +194,7 @@ const Home = ({ count, setCount }) => {
           )}
           {sorting === 1 && (
             <div className="mt-8 grid grid-cols-2 gap-5 md:grid-cols-3 md:gap-8 ">
-              {flowers.slice(9, 18).map((item, index) => {
+              {Flowers.slice(9, 18).map((item, index) => {
                 return (
                   <div
                     key={item.id}
@@ -243,7 +229,7 @@ const Home = ({ count, setCount }) => {
           )}
           {sorting === 2 && (
             <div className="mt-8 grid grid-cols-2 gap-5 md:grid-cols-3 md:gap-8 ">
-              {flowers.slice(2, 11).map((item, index) => {
+              {Flowers.slice(2, 11).map((item, index) => {
                 return (
                   <div
                     key={item.id}
@@ -281,9 +267,9 @@ const Home = ({ count, setCount }) => {
       <div className="flex flex-col md:justify-center md:flex-row gap-10">
         <div className="flex rounded items-center bg-gray-100 py-6 px-0 pr-3">
           <div>
-            {flowers.length > 5 && flowers[5].image_url && (
+            {Flowers.length > 5 && Flowers[5].image_url && (
               <img
-                src={flowers[5].image_url}
+                src={Flowers[5].image_url}
                 alt="img"
                 className="md:w-[200px] ml-10 rounded-xl w-[200px] h-[160px] md:h-[200px]"
               />
@@ -304,9 +290,9 @@ const Home = ({ count, setCount }) => {
         </div>
         <div className="flex rounded items-center bg-gray-100 py-6 px-0 pr-3">
           <div>
-            {flowers.length > 6 && flowers[6].image_url && (
+            {Flowers.length > 6 && Flowers[6].image_url && (
               <img
-                src={flowers[6].image_url}
+                src={Flowers[6].image_url}
                 alt="img"
                 className="md:w-[200px] ml-10 rounded-xl w-[200px] h-[160px] md:h-[200px]"
               />
@@ -337,9 +323,9 @@ const Home = ({ count, setCount }) => {
         <div className="md:flex md:justify-between grid grid-cols-2 md:gap-0 gap-4 mt-5">
           <div className="bg-gray-100 rounded-lg md:w-[22%]">
             <div className="bg-white flex justify-center h-[165px]  md:h-[150px] pb-3">
-              {flowers.length > 5 && flowers[5].image_url && (
+              {Flowers.length > 5 && Flowers[5].image_url && (
                 <img
-                  src={flowers[5].image_url}
+                  src={Flowers[5].image_url}
                   alt="img"
                   className="rounded-xl"
                 />
@@ -362,9 +348,9 @@ const Home = ({ count, setCount }) => {
           </div>
           <div className="bg-gray-100 rounded-lg md:w-[22%]">
             <div className="bg-white flex justify-center h-[165px]  md:h-[150px] pb-3">
-              {flowers.length > 2 && flowers[2].image_url && (
+              {Flowers.length > 2 && Flowers[2].image_url && (
                 <img
-                  src={flowers[2].image_url}
+                  src={Flowers[2].image_url}
                   alt="img"
                   className="rounded-xl"
                 />
@@ -387,9 +373,9 @@ const Home = ({ count, setCount }) => {
           </div>
           <div className="bg-gray-100 rounded-lg md:w-[22%]">
             <div className="bg-white flex justify-center h-[165px]  md:h-[150px] pb-3">
-              {flowers.length > 0 && flowers[0].image_url && (
+              {Flowers.length > 0 && Flowers[0].image_url && (
                 <img
-                  src={flowers[0].image_url}
+                  src={Flowers[0].image_url}
                   alt="img"
                   className="rounded-xl md:mx-8 w-[100%]"
                 />
@@ -412,9 +398,9 @@ const Home = ({ count, setCount }) => {
           </div>
           <div className="bg-gray-100 rounded-lg md:w-[22%]">
             <div className="bg-white flex justify-center h-[165px]  md:h-[150px] pb-3">
-              {flowers.length > 4 && flowers[4].image_url && (
+              {Flowers.length > 4 && Flowers[4].image_url && (
                 <img
-                  src={flowers[4].image_url}
+                  src={Flowers[4].image_url}
                   alt="img"
                   className="rounded-xl md:mx-8 w-[100%]"
                 />

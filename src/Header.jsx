@@ -10,15 +10,15 @@ import HomeIcon from "@mui/icons-material/Home";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
 import PersonIcon from "@mui/icons-material/Person";
-import { fetchData } from "./data/dataJson";
 import { useDispatch } from "react-redux";
 import { addItem } from "./page/CartMenu";
+
+import { Flowers } from "./json/Flowers";
 
 const Header = ({ setShopCart, count, setCount }) => {
   const [inputSearch, setInputSearch] = useState("hidden");
   const searchClick = () => {
     setInputSearch("flex");
-    console.log(flowers);
   };
   const closeClick = () => {
     setInputSearch("hidden");
@@ -64,19 +64,6 @@ const Header = ({ setShopCart, count, setCount }) => {
     }
   };
 
-  const [flowers, setFlowers] = useState([]);
-
-  useEffect(() => {
-    const fetchDataAsync = async () => {
-      try {
-        const data = await fetchData();
-        setFlowers(data);
-      } catch (error) {
-        console.error("Xatolik:", error);
-      }
-    };
-    fetchDataAsync();
-  }, []);
   return (
     <>
       <div className="hidden container mx-auto w-full max-w-6xl pb-7 pt-10 md:flex items-center justify-between py-4">
@@ -146,7 +133,7 @@ const Header = ({ setShopCart, count, setCount }) => {
             className={`${searchInputV} bg-opacity-40 absolute z-10 rounded-b-2xl py-4 px-4 container mx-auto max-w-6xl bg-black w-full top-20`}
           >
             <div className="min-h-16 space-y-2">
-              {flowers.map((item) =>
+              {Flowers.map((item) =>
                 item.scientific_name
                   .toLowerCase()
                   .includes(searchInput.toLowerCase()) &&
